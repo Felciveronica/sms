@@ -1,0 +1,164 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/dashboard.css">
+</head>
+<body>
+    <div style="display: flex;justify-content: flex-end;width:100%;">
+    <!-- <a >addstudent</a> -->
+     
+    <a href="/logout" class="logoutbutt" >logout</a>
+  </div>
+    <h1>Student Details</h1>
+    
+    <div class="container">
+        <div><h3 style="color: thistle;">Add student:<button onclick="showaddModal()" class="studentadd">Add students</button></h3></div>
+        <!-- this id the head  -->
+        <div class="tbl-header">
+          <table cellpadding="0" cellspacing="0" border="0">
+            <colgroup>
+                <col style="width:5%;">
+                <col style="width:15%;">
+                <col style="width:25%;">
+                <col style="width:20%;">
+                <col style="width:20%;">
+                <col style="width:15%;">
+                </colgroup>
+            <thead>
+              <tr style="color: #d4d4d4;">
+                <th>No</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Register Number</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div class="tbl-content">
+            <table cellpadding="0" cellspacing="0" border="0" id="studentTable">
+              <colgroup>
+              <col style="width:5%;">
+              <col style="width:15%;">
+              <col style="width:25%;">
+              <col style="width:20%;">
+              <col style="width:20%;">
+              <col style="width:15%;">
+              </colgroup>
+              <tbody id="student-body">
+
+            <% let r=1;let i=0; const arr=[['#c596bb','#9c7092'],['#9ea4e5','#676fc1'],['#abb4c7','#9765ba'],['#84cdd1','#63b4b8'],['#91cfa5','#64b87f']] %>
+            <% students.forEach(student => { %>
+
+            <tr data-id="<%= student._id %>" style="background-color: <%= arr[i][0] %>;color:<%=arr[i][1] %>">
+                <td><%= r %></td>
+                <td><%= student.name %></td>
+                <td><%= student.email %></td>
+                <td><%= student.phone %></td>
+                <td><%= student.RegistrationNumber %></td>
+                <td style="padding: 0px;"><button onclick="showModal('<%= r %>', '<%= student._id %>')" class="addbutton" style="background-color:<%= arr[i][1] %>; color:white">Delete</button> 
+                     <!-- <a href="user/editstudent/<%= student._id %>">editstudent</a> -->
+                    <button class='addbutton' style="border: solid 2px <%= arr[i][1] %>; color : #383838;background-color:<%= arr[i][0] %>" onclick="showeditModal('<%=student._id %>','<%= student.name %>','<%= student.email %>','<%= student.phone %>','<%= student.RegistrationNumber %>')">Edit</button></td>
+                <!-- <td><button onclick="editStudent('<%= r %>', '<%= student._id %>')">Edit</button></td> -->
+                
+               
+            </tr>
+            <% r++; i= (i+1)%5; }) %>
+        </tbody>
+    </table>
+        </div>
+    </div>
+   
+    <div id="confirmationModal" class="modal"> 
+        <div class="modal-content"> 
+            <div class="topm" > 
+                <p style="font-size: 25px;margin:5px">Confirm Deletion</p>
+                <span class="close-button" onclick="closeModal()">&times;</span>
+            </div>
+            
+             <p>Are you sure you want to delete this student?</p> 
+             <div class="buttdiv">
+                <button id="confirmDeleteButton" class="mbut" onclick="deleteStudent()">Confirm</button> 
+                <button onclick="closeModal()" class="mbut1">Cancel</button> 
+            </div>
+             
+        </div> 
+    </div>
+
+    <div id="addmodal" class="modal">
+
+        <div class="addcontent">
+        <div class="topm">
+            <p style="font-size: 25px;margin:5px;color:rgb(189, 189, 189);font-size: 32px;">Enter student details</p>
+            <span class="close-button" onclick="closeaddModal()" style="color:rgb(189, 189, 189);font-size: 32px;">&times;</span>
+        </div>
+        <form id="addForm">
+            <!-- <label for="name">Name:</label> -->
+            <input type="text" id="name" name="name" placeholder="USERNAME">
+            <div id="msg1" style="color:red"></div>
+    
+            <!-- <label for="email">Email:</label> -->
+            <input type="text" id="email" name="email" placeholder="EMAIL">
+            <div id="msg2" style="color:red"></div>
+          
+            <!-- <label for="phone">Phone:</label> -->
+            <input type="number" id="phone" name="phone" class="no-arrows" placeholder="PHONE NUMBER">
+            <div id="msg3" style="color:red"></div>
+    
+        
+            <!-- <label for="RegistrationNumber">RegistrationNumber:</label> -->
+            <input type="text" id="RegistrationNumber" name="RegistrationNumber" placeholder="REGISTRATION NUMBER">
+            <div id="msg4" style="color:red"></div>
+          
+          
+            <input type="submit" value="Submit" class="add-close-button">
+            <input type="reset" value="Reset">
+    
+        </form>
+    </div>
+    </div>
+
+    <div id="editmodal" class="modal">
+        <div class="editcontent">
+        <div class="topm">
+            <p style="font-size: 25px;margin:5px;color:rgb(189, 189, 189);">Edit student Details</p>
+            <span class="close-button" onclick="closeeditModal()" style="color:rgb(189, 189, 189);font-size: 32px;">&times;</span>
+        </div>
+        <form  id="editForm">
+            <label for="name">Name:</label>
+            <input type="text" id="editname" name="name" >
+            <div id="emsg1" style="color:red"></div>
+    
+            <label for="email">Email:</label>
+            <input type="text" id="editemail" name="email" >
+            <div id="emsg2" style="color:red"></div>
+    
+            <label for="phone">Phone:</label>
+            <input type="number" id="editphone" name="phone" class="no-arrows" >
+            <div id="emsg3" style="color:red"></div>
+    
+        
+            <label for="RegistrationNumber">RegistrationNumber:</label>
+            <input type="text" id="editRegistrationNumber" name="RegistrationNumber" ">
+            <div id="emsg4" style="color:red"></div>
+
+          
+            <div style="display: flex;justify-content: space-evenly;">
+            <input type="submit" value="Make changes" style="height:45px;width: 100%;max-width: 150px;">
+
+            <button onclick="closeeditModal()" class="editcancel">Cancel</button>
+        </div>
+        </form>
+    </div>
+    </div>
+
+
+
+    <script src="/dashboard.js"></script>
+</body>
+</html>
